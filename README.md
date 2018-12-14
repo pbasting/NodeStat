@@ -27,3 +27,9 @@ python3 node_stat.py -q highmem_q --free
 # displays HIGHMEM nodes with at least 40gb memory and 20 cpu threads available
 python3 node_stat.py -q highmem_q -m 40 -t 20
 ```
+
+## Common queues
+* highmem = `highmem_q`
+* batch = `batch`
+* interative = `s_interq`
+* GPU = `gpu_q`
