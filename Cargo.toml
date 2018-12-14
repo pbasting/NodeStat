@@ -1,6 +1,0 @@
-[package]
-name = "NodeStat"
-version = "0.1.0"
-authors = ["Preston Basting <pjb68507@uga.edu>"]
-
-[dependencies]
