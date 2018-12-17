@@ -1,5 +1,7 @@
 # NodeStat
-Script for parsing and displaying node status information of the HPC Sapelo2 at UGA.
+NodeStat is a script designed to retrieve node information from Sapelo2 and display it in a consise and easy to read format. The primary use for this script is to check the resource (CPU threads, memory) availability of nodes, so that users can determine the amount of resources to request for jobs. This should make it easier to tailor job submission scripts to avoid waiting in queues.
+
+
 
 ## Usage
 * To check the status of all nodes in a queue
