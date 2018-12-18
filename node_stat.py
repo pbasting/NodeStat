@@ -454,6 +454,7 @@ def formatJobInfo(job_info):
         cpu_time = "00:00:00"
         job = job.split("\n")
         state = "C"
+        node_id = "?"
         for line in job:
 
             if line.find("Job Id:") != -1:
