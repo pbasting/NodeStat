@@ -92,7 +92,7 @@ def main():
                 time.sleep(int(args.loop_mode))
                 line_count = len(node_info)
                 if len(job_info) > 0:
-                    line_count += (len(job_info) + 4)
+                    line_count += (len(job_info) + 3)
                     
             else:
                 run = False
