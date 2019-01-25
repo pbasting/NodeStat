@@ -24,7 +24,7 @@ def main():
                 sys.stderr.write("No nodes found in group: "+args.group+"\nExiting...\n")
                 sys.exit(1)
             else:
-                node_info.append("     [ "+("-"*10)+" CPU "+("-"*10)+" ] [ "+("-"*10)+" MEM "+("-"*10)+" ]\n")
+                node_info.append("       "+("-"*10)+" CPU "+("-"*10)+"     "+("-"*10)+" MEM "+("-"*10)+"  "+(" "*39)+"\n")
 
 
             # gets node with max mem avail and max threads avail
@@ -419,7 +419,19 @@ def formatNodeInfo(node):
 
 
 def displayNodeInfo(node_info):
-    for node in node_info:
+    # bkg_white = '\e[107m'
+    # bkg_none = '\e[49m'
+    # txt_black = '\e[30m'
+    # txt_none = '\e[39m'
+
+    for x,node in enumerate(node_info):
+        # if x == 0:
+        #     subprocess.call(["printf",bkg_white])
+        #     subprocess.call(["printf",txt_black])
+        # elif x == 1:
+        #     subprocess.call(["printf",bkg_none])
+        #     subprocess.call(["printf",txt_none])
+
         subprocess.call(["printf",node])
 
 
@@ -509,16 +521,26 @@ def formatJobInfo(job_info):
 
 
 def displayJobInfo(out_vals):
+    bkg_white = '\e[107m'
+    bkg_none = '\e[49m'
+    txt_black = '\e[30m'
+    txt_none = '\e[39m'
+
     labels = ["Node","Job ID","User","Name","S","NDS","THR","MEM","Max Time","Time","CPU Time"]
     widths = [4,14,8,16,1,3,3,5,9,9,9]
     gap = " "*2 # space between columns
 
+    subprocess.call(["printf",bkg_white])
+    subprocess.call(["printf",txt_black])
     for x in range(0,len(labels)):
         print(labels[x]+(" "*(widths[x]-len(labels[x]))), end=gap)
     print("")
-    for width in widths:
-        print("-"*width,end=gap)
-    print("")
+    # for width in widths:
+    #     print("-"*width,end=gap)
+
+    subprocess.call(["printf",bkg_none])
+    subprocess.call(["printf",txt_none])
+    # print("")
 
     for x in range(0,len(out_vals)):
         for y in range(0,len(out_vals[x])):        
