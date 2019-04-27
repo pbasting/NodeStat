@@ -76,7 +76,7 @@ def main():
                         subprocess.call(["tput","el"])
 
                 displayNodeInfo(node_info)
-                print("\n")
+                # print("\n") # extra gap between nodes and jobs?
                 displayJobInfo(job_info)
 
             # just displays nodes
@@ -91,7 +91,7 @@ def main():
             if args.loop_mode != None:
                 time.sleep(int(args.loop_mode))
                 line_count = len(node_info)
-                if len(job_info) > 0:
+                if args.job == True:
                     line_count += (len(job_info) + 3)
                     
             else:
@@ -187,132 +187,72 @@ class Node:
         self.used_mem = (int(mem_info[1]) - (int(mem_info[0])))//1024
 
 
-def sortNodes(nodes, mode):
+def sortNodesMem(nodes):
     swapped = True
     while(swapped == True):
         swapped = False
         for x in range(0,len(nodes)-1):
-            if mode == "M":
-                if (nodes[x].total_mem - nodes[x].used_mem) < (nodes[x+1].total_mem - nodes[x+1].used_mem):
-                    swapped = True
-                    tmp = nodes[x]
-                    nodes[x] = nodes[x+1]
-                    nodes[x+1] = tmp
-            elif mode == 'C':
-                if (nodes[x].total_cores - nodes[x].used_cores) < (nodes[x+1].total_cores - nodes[x+1].used_cores):
-                    swapped = True
-                    tmp = nodes[x]
-                    nodes[x] = nodes[x+1]
-                    nodes[x+1] = tmp
-
-    swapped = True
-    while (swapped == True):
-        swapped = False
-        for x in range(0,len(nodes)-1):
-            if ((nodes[x].state == 'Busy') and (nodes[x+1].state != 'Busy')):
+            if (nodes[x].total_mem - nodes[x].used_mem) < (nodes[x+1].total_mem - nodes[x+1].used_mem):
                 swapped = True
                 tmp = nodes[x]
                 nodes[x] = nodes[x+1]
                 nodes[x+1] = tmp
-
-    swapped = True
-    while (swapped == True):
-        swapped = False
-        for x in range(0,len(nodes)-1):
-            if ((nodes[x].state == 'Drained') and (nodes[x+1].state != 'Drained')):
-                swapped = True
-                tmp = nodes[x]
-                nodes[x] = nodes[x+1]
-                nodes[x+1] = tmp
-
-    swapped = True
-    while (swapped == True):
-        swapped = False
-        for x in range(0,len(nodes)-1):
-            if ((nodes[x].state == 'Down') and (nodes[x+1].state != 'Down')):
-                swapped = True
-                tmp = nodes[x]
-                nodes[x] = nodes[x+1]
-                nodes[x+1] = tmp
-
     
     return nodes
 
+def sortNodesCpu(nodes):
+    swapped = True
+    while(swapped == True):
+        swapped = False
+        for x in range(0,len(nodes)-1):
+            if (nodes[x].total_cores - nodes[x].used_cores) < (nodes[x+1].total_cores - nodes[x+1].used_cores):
+                swapped = True
+                tmp = nodes[x]
+                nodes[x] = nodes[x+1]
+                nodes[x+1] = tmp
+    
+    return nodes
+
+def sortNodesState(nodes, state):
+    swapped = True
+    while (swapped == True):
+        swapped = False
+        for x in range(0,len(nodes)-1):
+            if ((nodes[x].state == state) and (nodes[x+1].state != state)):
+                swapped = True
+                tmp = nodes[x]
+                nodes[x] = nodes[x+1]
+                nodes[x+1] = tmp
+
+    return nodes
+
+
+
+def sortNodes(nodes, mode):
+    if mode == "M":
+        nodes = sortNodesMem(nodes)
+
+    elif mode == 'C':
+        nodes = sortNodesCpu(nodes)
+
+    nodes = sortNodesState(nodes, 'Busy')
+    nodes = sortNodesState(nodes, 'Drained')
+    nodes = sortNodesState(nodes, 'Down')
+
+    return nodes
+
 def getBestNode(nodes, mode):
-    if mode == "C":    
-        swapped = True
-        while(swapped == True):
-            swapped = False
-            for x in range(0,len(nodes)-1):
-                if (nodes[x].total_mem - nodes[x].used_mem) < (nodes[x+1].total_mem - nodes[x+1].used_mem):
-                    swapped = True
-                    tmp = nodes[x]
-                    nodes[x] = nodes[x+1]
-                    nodes[x+1] = tmp
-
-        swapped = True
-        while(swapped == True):
-            swapped = False
-            for x in range(0,len(nodes)-1):
-                if (nodes[x].total_cores - nodes[x].used_cores) < (nodes[x+1].total_cores - nodes[x+1].used_cores):
-                    swapped = True
-                    tmp = nodes[x]
-                    nodes[x] = nodes[x+1]
-                    nodes[x+1] = tmp
-
-
+    if mode == "C": 
+        nodes = sortNodesMem(nodes)
+        nodes = sortNodesCpu(nodes)
 
     else:
-        swapped = True
-        while(swapped == True):
-            swapped = False
-            for x in range(0,len(nodes)-1):
-                if (nodes[x].total_cores - nodes[x].used_cores) < (nodes[x+1].total_cores - nodes[x+1].used_cores):
-                    swapped = True
-                    tmp = nodes[x]
-                    nodes[x] = nodes[x+1]
-                    nodes[x+1] = tmp
+        nodes = sortNodesCpu(nodes)
+        nodes = sortNodesMem(nodes)
 
-        swapped = True
-        while(swapped == True):
-            swapped = False
-            for x in range(0,len(nodes)-1):
-                if (nodes[x].total_mem - nodes[x].used_mem) < (nodes[x+1].total_mem - nodes[x+1].used_mem):
-                    swapped = True
-                    tmp = nodes[x]
-                    nodes[x] = nodes[x+1]
-                    nodes[x+1] = tmp
-
-
-    swapped = True
-    while (swapped == True):
-        swapped = False
-        for x in range(0,len(nodes)-1):
-            if ((nodes[x].state == 'Busy') and (nodes[x+1].state != 'Busy')):
-                swapped = True
-                tmp = nodes[x]
-                nodes[x] = nodes[x+1]
-                nodes[x+1] = tmp
-
-    swapped = True
-    while (swapped == True):
-        swapped = False
-        for x in range(0,len(nodes)-1):
-            if ((nodes[x].state == 'Drained') and (nodes[x+1].state != 'Drained')):
-                swapped = True
-                tmp = nodes[x]
-                nodes[x] = nodes[x+1]
-                nodes[x+1] = tmp
-
-    swapped = True
-    while (swapped == True):
-        swapped = False
-        for x in range(0,len(nodes)-1):
-            if ((nodes[x].state == 'Down') and (nodes[x+1].state != 'Down')):
-                swapped = True
-                tmp = nodes[x]
-                nodes[x] = nodes[x+1]
-                nodes[x+1] = tmp
+    nodes = sortNodesState(nodes, 'Busy')
+    nodes = sortNodesState(nodes, 'Drained')
+    nodes = sortNodesState(nodes, 'Down')
 
     swapped = True
     while (swapped == True):
@@ -530,17 +470,13 @@ def displayJobInfo(out_vals):
     widths = [4,14,8,16,1,3,3,5,9,9,9]
     gap = " "*2 # space between columns
 
-    subprocess.call(["printf",bkg_white])
-    subprocess.call(["printf",txt_black])
+
+    print("_"*102)
     for x in range(0,len(labels)):
         print(labels[x]+(" "*(widths[x]-len(labels[x]))), end=gap)
+    
     print("")
-    # for width in widths:
-    #     print("-"*width,end=gap)
-
-    subprocess.call(["printf",bkg_none])
-    subprocess.call(["printf",txt_none])
-    # print("")
+    print("-"*102)
 
     for x in range(0,len(out_vals)):
         for y in range(0,len(out_vals[x])):        
