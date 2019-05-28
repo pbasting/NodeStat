@@ -152,7 +152,7 @@ def getNodes(group):
     node_info = []
     for line in pbsnodes_text.stdout:
         line = line.decode()
-        if line.find("["+group+"]") != -1:
+        if line.find("["+group+"]") != -1 and line.find("["+group+"][") == -1:
             node = Node()
             node.setNodeInfo(line)
             nodes.append(node)
