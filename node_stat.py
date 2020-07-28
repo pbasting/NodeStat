@@ -482,6 +482,8 @@ def format_job_info(job_info, system):
             nodes = line[6]
             req_cpu = line[7]
             req_mem = line[8].replace("Mn","")
+            req_mem = line[8].replace("n","")
+            req_mem = req_mem.replace("G","000")
             req_mem = str(int(req_mem)//1000)
             req_time = line[9]
             wall_time = line[10]
