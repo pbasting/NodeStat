@@ -406,7 +406,7 @@ def get_job_info(group, system):
         job_info.append(info)
     
     else:
-        qstat_text = subprocess.Popen(["sacct","--format","partition,NodeList,JobID,User,jobname,State,ReqNodes,ReqCPUs,ReqMem,Timelimit,Elapsed,CPUTime","-p"], stdout=subprocess.PIPE)
+        qstat_text = subprocess.Popen(["sacct","-a","--format","partition,NodeList,JobID,User,jobname,State,ReqNodes,ReqCPUs,ReqMem,Timelimit,Elapsed,CPUTime","-p"], stdout=subprocess.PIPE)
         info = ""
         for ln,line in enumerate(qstat_text.stdout):
             if ln > 0:
