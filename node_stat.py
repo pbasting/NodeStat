@@ -518,16 +518,16 @@ def display_job_info(out_vals):
     txt_none = '\e[39m'
 
     labels = ["Node","Job ID","User","Name","S","NDS","THR","MEM","Max Time","Time","CPU Time"]
-    widths = [4,14,8,16,1,3,3,5,9,9,9]
+    widths = [8,14,8,16,1,3,3,5,12,12,12]
     gap = " "*2 # space between columns
 
 
-    print("_"*102)
+    print("_"*113)
     for x in range(0,len(labels)):
         print(labels[x]+(" "*(widths[x]-len(labels[x]))), end=gap)
     
     print("")
-    print("-"*102)
+    print("-"*113)
 
     for x in range(0,len(out_vals)):
         for y in range(0,len(out_vals[x])):        
