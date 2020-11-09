@@ -47,7 +47,7 @@ class Node:
                     self.total_cores = int(split_info[1])
                 if "AllocMem" == split_info[0]:
                     self.used_mem = int(split_info[1])//1000
-                if "FreeMem" == split_info[0]:
+                if "RealMemory" == split_info[0]:
                     try:
                         self.total_mem = int(split_info[1])//1000
                     except:
@@ -153,7 +153,7 @@ def parse_args():
     
     valid_systems = ["torque", "slurm"]
     if args.system is None:
-        args.system = "torque"
+        args.system = "slurm"
     else:
         args.system = args.system.lower()
         if args.system not in valid_systems:
@@ -481,10 +481,12 @@ def format_job_info(job_info, system):
             state = line[5][0]
             nodes = line[6]
             req_cpu = line[7]
-            req_mem = line[8].replace("Mn","")
-            req_mem = line[8].replace("n","")
+            req_mem = line[8].replace("Mc","")
+            req_mem = req_mem.replace("Mn","")
+            req_mem = req_mem.replace("n","")
+            req_mem = req_mem.replace("c","")
             req_mem = req_mem.replace("G","000")
-            req_mem = str(int(req_mem)//1000)
+            req_mem = str(int(float(req_mem))//1000)
             req_time = line[9]
             wall_time = line[10]
             cpu_time = line[11]
